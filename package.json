@@ -7,8 +7,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "lodash": "^3.10.1",
+    "md5": "^2.1.0",
+    "moment": "^2.13.0",
     "react": "15.3.2",
-    "react-native": "0.35.0"
+    "react-native": "0.35.0",
+    "react-native-navbar": "^1.5.4",
+    "reflux": "^0.4.1",
+    "react-native-sound": "^0.8.3"
   },
   "jest": {
     "preset": "jest-react-native"
