@@ -6,14 +6,14 @@ import {
   Text,
   View,
   Image,
+  Navigator,
   TouchableHighlight,
   ProgressViewIOS,
 } from 'react-native'
 import Reflux from 'reflux';
 import Sound from 'react-native-sound';
-
 import {HomeActions} from './../actions';
-
+import Heading from './Header/index';
 
 var Topic_Image = React.createClass({
   render: function(){
@@ -64,10 +64,16 @@ class AgileApps extends Component {
                    english_abc: false};
   }
   _onReadPressIn = () => {
-    this.setState({read: true});
+//     this.setState({read: true});
+    playSound('read.mp3');
   }
   _onReadPressOut = () => {
-   this.setState({read: false}); 
+//    this.setState({read: false}); 
+    playSound('explore.mp3');
+   <Navigator
+        ref='navigator'
+        initialRoute={{name: ''}}
+        renderScene={this._renderScene}/>
   }
   _onExplorePressIn = () => {
     this.setState({explore: true});
@@ -94,13 +100,25 @@ class AgileApps extends Component {
   _onEnglishABCPressOut = () => {
    this.setState({english_abc: false}); 
   }
+  goHome(){
+    this.refs.navigator.popToTop();
+  }
+  _renderScene(route) {
+    
+//     switch (route.name) {
+//     case 'read':
+//       console.log('route name'+route.name);
+// //       return <Read/>;
+//     default:
+//       console.error('Encountered unexpected route: ' + route.name);
+//     }
+//     return null;
+  }
   
   render() {
     return (
       <View style={styles.container}>
-        
         <View style={styles.top}>
-          
           <TouchableHighlight
             onPressIn={this._onExplorePressIn}
             onPressOut={this._onExplorePressOut}
@@ -167,9 +185,7 @@ class AgileApps extends Component {
                 source={require('../public/assest/read.png')}
               />
               <Topic_Text name='Read'/>
-              <Text style={styles.welcome}>
-                  {this.state.read ? playSound('read.mp3') : ''}
-              </Text>
+
             </View>
           </TouchableHighlight>
           
