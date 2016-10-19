@@ -15,17 +15,141 @@ import Sound from 'react-native-sound';
 import {HomeActions} from './../actions';
 import Heading from './Header/index';
 
-var Topic_Image = React.createClass({
-  render: function(){
+
+class AgileApps extends Component {
+  constructor(props) {
+    super(props);
+    this.displayName = 'Erton101';
+    this.state = { read: false ,
+                   explore: false,
+                   write: false,
+                   game: false,
+                   english_abc: false};
+  }
+  _onReadPress = () => {
+    playSound('read.mp3');
+  }
+  _onExplorePress = () => {
+    playSound('explore.mp3');
+  }
+  _onWritePress = () => {
+    playSound('write.mp3');
+  }
+  _onGamePress = () => {
+    playSound('game.mp3');
+  }
+  _onEnglishABCPress = () => {
+    playSound('english_abc.mp3');
+  }
+  goHome(){
+    this.refs.navigator.popToTop();
+  }
+  _renderScene(route) {
+    
+//     switch (route.name) {
+//     case 'read':
+//       console.log('route name'+route.name);
+// //       return <Read/>;
+//     default:
+//       console.error('Encountered unexpected route: ' + route.name);
+//     }
+//     return null;
+  }
+  
+  render() {
     return (
-      <Image 
-        style={styles.group_image}
-        resizeMode={"cover"}
-        source={require('../public/assest/explore.png')}
-        />
+      <View style={styles.container}>
+        <View style={styles.top}>
+          <TouchableHighlight
+            onPress={this._onExplorePress}
+            style={styles.button}>
+            <View style={styles.group}>
+              <Image 
+                style={styles.group_image}
+                resizeMode={"cover"}
+                source={require('../public/assest/explore.png')}
+              />
+              <Topic_Text name='Explore'/>
+            </View>
+          </TouchableHighlight>
+          
+        </View>
+        
+        <View style={styles.mid}>
+  
+          <TouchableHighlight
+            onPress={this._onGamePress}
+            style={styles.button}>
+            <View style={styles.group}>
+              <Image 
+                style={styles.group_image}
+                resizeMode={"cover"}
+                source={require('../public/assest/game.png')}
+              />
+              <Topic_Text name='Game'/>
+            </View>
+          </TouchableHighlight>
+          
+          <TouchableHighlight
+            onPress={this._onEnglishABCPress}
+            style={styles.button}>
+            <View style={styles.group}>
+              <Image 
+                style={styles.group_image}
+                resizeMode={"cover"}
+                source={require('../public/assest/english_abc.png')}
+              />
+              <Topic_Text name='English ABC'/>
+            </View>
+          </TouchableHighlight>
+          
+          <TouchableHighlight
+            onPress={this._onReadPress}
+            style={styles.button}>
+            <View style={styles.group}>
+              <Image 
+                style={styles.group_image}
+                resizeMode={"cover"}
+                source={require('../public/assest/read.png')}
+              />
+              <Topic_Text name='Read'/>
+            </View>
+          </TouchableHighlight>
+          
+        </View>
+
+        <View style={styles.bottom}>
+          
+          <TouchableHighlight
+            onPress={this._onWritePress}
+            style={styles.button}>
+            <View style={styles.group}>
+              <Image 
+                style={styles.group_image}
+                resizeMode={"cover"}
+                source={require('../public/assest/write.png')}
+              />
+              <Topic_Text name='Write'/>
+            </View>
+          </TouchableHighlight>
+
+        </View>
+      </View>
     );
   }
-})
+};
+
+// var Topic_Image = React.createClass({
+//   render: function(){
+//     return (
+//       <Image 
+//         style={styles.group_image}
+//         resizeMode={"cover"}
+//         source={require('../public/assest/explore.png')}
+//         />
+//     );
+//   }
+// })
 var Topic_Text = React.createClass({
   render: function(){
     return (
@@ -53,168 +177,6 @@ function playSound(filename){
       }
     });
 }
-class AgileApps extends Component {
-  constructor(props) {
-    super(props);
-    this.displayName = 'Erton101';
-    this.state = { read: false ,
-                   explore: false,
-                   write: false,
-                   game: false,
-                   english_abc: false};
-  }
-  _onReadPressIn = () => {
-//     this.setState({read: true});
-    playSound('read.mp3');
-  }
-  _onReadPressOut = () => {
-//    this.setState({read: false}); 
-    playSound('explore.mp3');
-   <Navigator
-        ref='navigator'
-        initialRoute={{name: ''}}
-        renderScene={this._renderScene}/>
-  }
-  _onExplorePressIn = () => {
-    this.setState({explore: true});
-  }
-  _onExplorePressOut = () => {
-   this.setState({explore: false}); 
-  }
-  
-  _onWritePressIn = () => {
-    this.setState({write: true});
-  }
-  _onWritePressOut = () => {
-   this.setState({write: false}); 
-  }
-  _onGamePressIn = () => {
-    this.setState({game: true});
-  }
-  _onGamePressOut = () => {
-   this.setState({game: false}); 
-  }
-  _onEnglishABCPressIn = () => {
-    this.setState({english_abc: true});
-  }
-  _onEnglishABCPressOut = () => {
-   this.setState({english_abc: false}); 
-  }
-  goHome(){
-    this.refs.navigator.popToTop();
-  }
-  _renderScene(route) {
-    
-//     switch (route.name) {
-//     case 'read':
-//       console.log('route name'+route.name);
-// //       return <Read/>;
-//     default:
-//       console.error('Encountered unexpected route: ' + route.name);
-//     }
-//     return null;
-  }
-  
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.top}>
-          <TouchableHighlight
-            onPressIn={this._onExplorePressIn}
-            onPressOut={this._onExplorePressOut}
-            style={styles.button}>
-            <View style={styles.group}>
-              <Image 
-                style={styles.group_image}
-                resizeMode={"cover"}
-                source={require('../public/assest/explore.png')}
-              />
-              <Topic_Text name='Explore'/>
-              <Text style={styles.welcome}>
-                {this.state.explore ? playSound('explore.mp3') : ''}
-              </Text>
-            </View>
-          </TouchableHighlight>
-          
-        </View>
-        
-        <View style={styles.mid}>
-          
-          <TouchableHighlight
-            onPressIn={this._onGamePressIn}
-            onPressOut={this._onGamePressOut}
-            style={styles.button}>
-            <View style={styles.group}>
-              <Image 
-                style={styles.group_image}
-                resizeMode={"cover"}
-                source={require('../public/assest/game.png')}
-              />
-              <Topic_Text name='Game'/>
-              <Text style={styles.welcome}>
-                  {this.state.game ? playSound('game.mp3') : ''}
-              </Text>
-            </View>
-          </TouchableHighlight>
-          
-          <TouchableHighlight
-            onPressIn={this._onEnglishABCPressIn}
-            onPressOut={this._onEnglishABCPressOut}
-            style={styles.button}>
-            <View style={styles.group}>
-              <Image 
-                style={styles.group_image}
-                resizeMode={"cover"}
-                source={require('../public/assest/english_abc.png')}
-              />
-              <Topic_Text name='English ABC'/>
-              <Text style={styles.welcome}>
-                  {this.state.english_abc ? playSound('english_abc.mp3') : ''}
-              </Text>
-            </View>
-          </TouchableHighlight>
-          
-          <TouchableHighlight
-            onPressIn={this._onReadPressIn}
-            onPressOut={this._onReadPressOut}
-            style={styles.button}>
-            <View style={styles.group}>
-              <Image 
-                style={styles.group_image}
-                resizeMode={"cover"}
-                source={require('../public/assest/read.png')}
-              />
-              <Topic_Text name='Read'/>
-
-            </View>
-          </TouchableHighlight>
-          
-        </View>
-
-        <View style={styles.bottom}>
-          
-          <TouchableHighlight
-            onPressIn={this._onWritePressIn}
-            onPressOut={this._onWritePressOut}
-            style={styles.button}>
-            <View style={styles.group}>
-              <Image 
-                style={styles.group_image}
-                resizeMode={"cover"}
-                source={require('../public/assest/write.png')}
-              />
-              <Topic_Text name='Write'/>
-              <Text style={styles.welcome}>
-                  {this.state.write ? playSound('write.mp3') : ''}
-              </Text>
-            </View>
-          </TouchableHighlight>
-
-        </View>
-      </View>
-    );
-  }
-};
 
 var styles = StyleSheet.create({
   container:{
@@ -274,4 +236,3 @@ var styles = StyleSheet.create({
 });
 
 export default AgileApps;
-

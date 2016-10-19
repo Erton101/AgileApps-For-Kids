@@ -7,4 +7,5 @@ import {
   AppRegistry,
 } from 'react-native';
 import AgileApps from './src/components/agileapps';
+// import AnimatedButtonPress from './src/components/longpress';
 AppRegistry.registerComponent('agileapps', () => AgileApps);
