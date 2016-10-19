@@ -170,10 +170,13 @@ function playSound(filename){
         s.play((success) => {
           if (success) {
             console.log('successfully finished playing');
+            // Release the audio player resource
           } else {
             console.log('playback failed due to audio decoding errors');
           }
+          s.release();
         });
+        
       }
     });
 }
