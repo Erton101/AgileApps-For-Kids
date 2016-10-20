@@ -7,7 +7,7 @@ import {
   Text,
   View,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native'
 import Reflux from 'reflux';
 import Sound from 'react-native-sound';
@@ -16,24 +16,122 @@ import Video from 'react-native-video';
 class Read extends Component {
   constructor(props) {
     super(props);
-    this.displayName = 'Erton101';
-    this.state = { read: false ,
-                   explore: false,
-                   write: false,
-                   game: false,
-                   english_abc: false};
+    this.onLoad = this.onLoad.bind(this);
+    this.onProgress = this.onProgress.bind(this);
+  }
+  
+  state = {
+    rate: 1,
+    volume: 1,
+    muted: false,
+    resizeMode: 'contain',
+    duration: 0.0,
+    currentTime: 0.0,
+  };
+
+  onLoad(data) {
+    this.setState({duration: data.duration});
+  }
+
+  onProgress(data) {
+    this.setState({currentTime: data.currentTime});
+  }
+
+  getCurrentTimePercentage() {
+    if (this.state.currentTime > 0) {
+      return parseFloat(this.state.currentTime) / parseFloat(this.state.duration);
+    } else {
+      return 0;
+    }
+  }
+
+  renderRateControl(rate) {
+    const isSelected = (this.state.rate == rate);
+
+    return (
+      <TouchableOpacity onPress={() => { this.setState({rate: rate}) }}>
+        <Text style={[styles.controlOption, {fontWeight: isSelected ? "bold" : "normal"}]}>
+          {rate}x
+        </Text>
+      </TouchableOpacity>
+    )
+  }
+
+  renderResizeModeControl(resizeMode) {
+    const isSelected = (this.state.resizeMode == resizeMode);
+
+    return (
+      <TouchableOpacity onPress={() => { this.setState({resizeMode: resizeMode}) }}>
+        <Text style={[styles.controlOption, {fontWeight: isSelected ? "bold" : "normal"}]}>
+          {resizeMode}
+        </Text>
+      </TouchableOpacity>
+    )
+  }
+
+  renderVolumeControl(volume) {
+    const isSelected = (this.state.volume == volume);
+
+    return (
+      <TouchableOpacity onPress={() => { this.setState({volume: volume}) }}>
+        <Text style={[styles.controlOption, {fontWeight: isSelected ? "bold" : "normal"}]}>
+          {volume * 100}%
+        </Text>
+      </TouchableOpacity>
+    )
   }
 
   render() {
+    const flexCompleted = this.getCurrentTimePercentage() * 100;
+    const flexRemaining = (1 - this.getCurrentTimePercentage()) * 100;
+
     return (
       <View style={styles.container}>
         <View style={styles.left}>
-          <Video
-            repeat
-            resizeMode='cover'
-            source={require('../public/video/PhonicsSongABC.mp4')}
-            style={styles.backgroundVideo}
-          />
+          <TouchableOpacity style={styles.fullScreen} onPress={() => {this.setState({paused: !this.state.paused})}}>
+            <Video source={require('../public/video/PhonicsSongABC.mp4')}
+                   style={styles.fullScreen}
+                   rate={this.state.rate}
+                   paused={this.state.paused}
+                   volume={this.state.volume}
+                   muted={this.state.muted}
+                   resizeMode={this.state.resizeMode}
+                   onLoad={this.onLoad}
+                   onProgress={this.onProgress}
+                   onEnd={() => { console.log('Done!') }}
+                   repeat={true} />
+          </TouchableOpacity>
+
+          <View style={styles.controls}>
+            <View style={styles.generalControls}>
+              <View style={styles.rateControl}>
+                {this.renderRateControl(0.25)}
+                {this.renderRateControl(0.5)}
+                {this.renderRateControl(1.0)}
+                {this.renderRateControl(1.5)}
+                {this.renderRateControl(2.0)}
+              </View>
+
+              <View style={styles.volumeControl}>
+                {this.renderVolumeControl(0.5)}
+                {this.renderVolumeControl(1)}
+                {this.renderVolumeControl(1.5)}
+              </View>
+
+              <View style={styles.resizeModeControl}>
+                {this.renderResizeModeControl('cover')}
+                {this.renderResizeModeControl('contain')}
+                {this.renderResizeModeControl('stretch')}
+              </View>
+            </View>
+
+            <View style={styles.trackingControls}>
+              <View style={styles.progress}>
+                <View style={[styles.innerProgressCompleted, {flex: flexCompleted}]} />
+                <View style={[styles.innerProgressRemaining, {flex: flexRemaining}]} />
+              </View>
+            </View>
+          </View>
         </View>
         
         <View style={styles.mid}>
@@ -41,47 +139,16 @@ class Read extends Component {
         </View>
 
         <View style={styles.right}>
-          
+
 
         </View>
         
       </View>
     );
   }
-};
-
-var Topic_Text = React.createClass({
-  render: function(){
-    return (
-      <Text
-        style={styles.group_text}>
-        {this.props.name}
-      </Text>
-    );
-  }
-})
-function playSound(filename){
-  var s = new Sound(filename, Sound.MAIN_BUNDLE, (e) => { //'explore.mp3'
-      if (e) {
-        console.log('failed to load the sound', e);
-      } else {
-        console.log('duration in seconds: ' + s.getDuration() +
-        'number of channels: ' + s.getNumberOfChannels());
-        s.play((success) => {
-          if (success) {
-            console.log('successfully finished playing');
-            // Release the audio player resource
-          } else {
-            console.log('playback failed due to audio decoding errors');
-          }
-          s.release();
-        });
-      }
-    });
 }
-
-var styles = StyleSheet.create({
-  container:{
+const styles = StyleSheet.create({
+  container: {
     flex: 1,
     flexDirection: 'row',
   },
@@ -90,7 +157,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-//     backgroundColor: 'red',
+    backgroundColor: 'white',
   },
   mid:{
     flex: 1,
@@ -106,20 +173,66 @@ var styles = StyleSheet.create({
     alignItems: 'center',
 //     backgroundColor: 'green',
   },
-  group_text:{
-    color: "blue",
-    fontSize: 36,
-    fontWeight: "200",
-    fontFamily: 'Helvetica Neue',
-  },
-  backgroundVideo: {
+  fullScreen: {
     position: 'absolute',
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
   },
-
+  controls: {
+    backgroundColor: "transparent",
+    borderRadius: 5,
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+  },
+  progress: {
+    flex: 1,
+    flexDirection: 'row',
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  innerProgressCompleted: {
+    height: 20,
+    backgroundColor: '#cccccc',
+  },
+  innerProgressRemaining: {
+    height: 20,
+    backgroundColor: '#2C2C2C',
+  },
+  generalControls: {
+    flex: 1,
+    flexDirection: 'row',
+    borderRadius: 4,
+    overflow: 'hidden',
+    paddingBottom: 10,
+  },
+  rateControl: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  volumeControl: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  resizeModeControl: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  controlOption: {
+    alignSelf: 'center',
+    fontSize: 12,
+    color: "black",
+    paddingLeft: 2,
+    paddingRight: 2,
+    lineHeight: 12,
+  },
 });
 
 export default Read
