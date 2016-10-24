@@ -9,8 +9,8 @@ class AgileApps extends Component {
     return (
       <Router>
         <Scene key="root">
-          <Scene key="home" component={Home} title="Home" />
-          <Scene key="read" component={Read} title="Read" initial={true} />
+          <Scene key="home" component={Home} title="Home" initial={true}/>
+          <Scene key="read" component={Read} title="Read" />
         </Scene>
       </Router>
     )

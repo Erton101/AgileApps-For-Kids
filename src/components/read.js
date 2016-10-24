@@ -7,11 +7,14 @@ import {
   Text,
   View,
   Image,
+  ListView,
   TouchableOpacity,
 } from 'react-native'
 import Reflux from 'reflux';
 import Sound from 'react-native-sound';
 import Video from 'react-native-video';
+
+var videoData = require('../public/json/customData.json');
 
 class Read extends Component {
   constructor(props) {
@@ -89,7 +92,7 @@ class Read extends Component {
       <View style={styles.container}>
         <View style={styles.left}>
           <TouchableOpacity style={styles.fullScreen} onPress={() => {this.setState({paused: !this.state.paused})}}>
-            <Video source={require('../public/video/PhonicsSongABC.mp4')}
+            <Video source={{uri: "phonicssongabc"}}
                    style={styles.fullScreen}
                    rate={this.state.rate}
                    paused={this.state.paused}
@@ -135,7 +138,16 @@ class Read extends Component {
         </View>
         
         <View style={styles.mid}>
-  
+          <Text
+            style={{
+              color: 'black',
+              fontSize: 16,
+              fontWeight: 'normal',
+              fontFamily: 'Helvetica Neue',
+            }}>
+            {videoData.VideoID}
+          </Text>
+          
         </View>
 
         <View style={styles.right}>
@@ -236,3 +248,5 @@ const styles = StyleSheet.create({
 });
 
 export default Read
+
+require('react-native-video').default
